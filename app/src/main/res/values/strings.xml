@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">GameApplication</string>
+    <string name="title">Guess the Headline!</string>
+    <string name="current_score">Current Score : </string>
+    <string name="score">0</string>
+    <string name="stand_first">Standfirst</string>
+    <string name="read_more">Read Article</string>
+    <string name="guess_headline">Guess the Headline!</string>
+    <string name="headline_01">Headline One</string>
+    <string name="headline_02">Headline Two</string>
+    <string name="headline_03">Headline Three</string>
+    <string name="skip">Skip</string>
+    <string name="next_question">Next Question</string>
+    <string name="back">Back</string>
+    <string name="correct">That is the correct option!</string>
+    <string name="incorrect">That is incorrect, Correct option is</string>
+    <string name="image">Image</string>
+</resources>
