@@ -116,6 +116,113 @@ A Headline data class is created using "JSON to Kotlin class" plugin to map the 
               val api = PropertiesApi()
               val repository = PropertiesRepository(api)
 
+### Room Database
+
+The Room persistence library provides an abstraction layer over SQLite to allow for more robust database access while harnessing the full power of SQLite.
+Basically, with the help of room we can quickly create sqlite databases and perform the operations like create, read, update and delete. Room makes everything very easy and quick.
+We have the Data Access Object(DAO) which has all database related functions to insert,fetch,delete and update in the Room Database
+
+### Components of Room
+We have 3 components of room.
+
+- Entity: Instead of creating the SQLite table, we will create the Entity. Entity is nothing but a model class annotated with @Entity. The variables of this class is our columns, and the class is our table.
+
+        @Entity(tableName = "headline_table")
+        @TypeConverters(ItemTypeConverter::class)
+        data class Headline(
+        
+            @ColumnInfo(name = "items")
+            val items: List<Item>,
+        
+            @ColumnInfo(name = "product")
+            val product: String,
+        
+            @ColumnInfo(name = "resultSize")
+            val resultSize: Int,
+        
+            @ColumnInfo(name = "version")
+            val version: Int
+        ){
+            @PrimaryKey(autoGenerate = true)
+            var id : Int = 0
+        }
+
+        data class Item(
+        
+            @ColumnInfo(name = "correctAnswerIndex")
+            val correctAnswerIndex: Int,
+        
+            @ColumnInfo(name = "headlines")
+            val headlines: List<String>,
+        
+            @ColumnInfo(name = "imageUrl")
+            val imageUrl: String,
+        
+            @ColumnInfo(name = "section")
+            val section: String,
+        
+            @ColumnInfo(name = "standFirst")
+            val standFirst: String,
+        
+            @ColumnInfo(name = "storyUrl")
+            val storyUrl: String
+        )
+
+
+- Database: It is an abstract class where we define all our entities.
+
+       @Database(entities = [Headline::class], version = 2, exportSchema = false)
+       abstract class HeadlineDatabase:RoomDatabase() {
+      
+          abstract fun getHeadlineDao(): Headlinedao
+      
+          companion object{
+      
+              @Volatile
+              private var INSTANCE: HeadlineDatabase? = null
+      
+      
+              fun getDatabase(context: Context): HeadlineDatabase {
+                  val tempInstance = INSTANCE
+                  if (tempInstance != null) {
+                      return tempInstance
+                  }
+      
+                  synchronized(this) {
+      
+                      val instance = Room.databaseBuilder(
+                              context.applicationContext,
+                              HeadlineDatabase::class.java,
+                              "headline_database"
+                          )
+                              .fallbackToDestructiveMigration()
+                              .build()
+                          INSTANCE = instance
+      
+                      return instance
+                  }
+              }
+          }
+      
+      }
+
+- DAO: Stands for Data Access Object. It is an interface that defines all the operations that we need to perform in our database.
+    
+        @Dao
+        interface Headlinedao {
+        
+            @Query("SELECT * FROM headline_table")
+            fun getAll(): Headline
+        
+            @Insert
+            fun insertAll(vararg headline:Headline)
+        
+            @Insert
+            fun insert( headline:Headline)
+        
+            @Delete
+            fun delete(headline:Headline)
+        }
 
 ### Coroutines
 Coroutines are a great way to write asynchronous code that is perfectly readable and maintainable. We use it to perform a job of reading data from the JSON url.
@@ -145,6 +252,7 @@ Coroutines are a great way to write asynchronous code that is perfectly readable
                 { _headlines.value = it }
                 )
                    }
+                  
 
 ### View
 It is the UI part that represents the current state of information that is visible to the user.
