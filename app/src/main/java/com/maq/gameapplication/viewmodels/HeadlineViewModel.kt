@@ -76,18 +76,22 @@ class HeadlineViewModel(val repository: HeadlineRepository) : ViewModel() {
             }
     }
 
+    //headline click function
     fun headlineClick(view: View){
         headlineListener?.onHeadlineClick(view)
     }
 
+    //function to read more on headline
     fun readMore(view: View){
         headlineListener?.onReadMore()
     }
 
+    //function to move to next question
     fun nextQuestion(view: View){
         headlineListener?.onNextQuestion()
     }
 
+    //function to skip question
     fun skipQuestion(view: View){
         headlineListener?.onSkip()
     }
