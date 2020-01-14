@@ -341,6 +341,9 @@ We declare the respective dependencies
 
     //GSON
     implementation 'com.google.code.gson:gson:2.8.6'
+    
+# Testing
+Used Espresso to write a few concise, beautiful, and reliable Android UI tests in src/androidTest/java/ExampleInstrumentedTest 
 
 # Screenshots
 <img width="350" alt="Screen Shot 2019-12-25 at 8 05 55 AM" src="https://user-images.githubusercontent.com/19331629/72323672-5b9f1700-36fd-11ea-92c3-6e0e95a6a44d.png"> <img width="350" alt="Screen Shot 2019-12-25 at 8 05 55 AM" src="https://user-images.githubusercontent.com/19331629/72323671-5b068080-36fd-11ea-91c8-9eb0bc991541.png">
