@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         //fetch data from Room database and perform databinding to layout
-        viewModel.headlinesfetch.observe(this, Observer { headlines ->
+        viewModel.headlinesfetch.observe(this, Observer { _ ->
             findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
 
             //display the first entry on screen
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 
         //button to skip to next question
         binding.buttonSkip.setOnClickListener{
-            viewModel.headlinesfetch.observe(this, Observer { headlines ->
+            viewModel.headlinesfetch.observe(this, Observer { _ ->
 
                 i = i + 1
                 binding.headlineItem = viewModel.headlines.value?.items?.get(i)
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
         //button to move to next question after submitting answer
         binding.buttonNextquestion.setOnClickListener{
 
-            viewModel.headlinesfetch.observe(this, Observer { headlines ->
+            viewModel.headlinesfetch.observe(this, Observer { _ ->
 
                 i = i + 1
                 binding.headlineItem = viewModel.headlines.value?.items?.get(i)

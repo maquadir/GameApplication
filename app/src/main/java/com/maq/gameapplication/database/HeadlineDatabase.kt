@@ -16,20 +16,6 @@ import com.maq.gameapplication.data.Headline
         @Volatile
         private var INSTANCE: HeadlineDatabase? = null
 
-        private val LOCK = Any()
-
-//        operator fun invoke(context: Context) = INSTANCE ?: synchronized(LOCK){
-//            INSTANCE ?: buildDatabase(context).also {
-//                INSTANCE = it
-//            }
-//        }
-//
-//        private fun buildDatabase(context: Context) = Room.databaseBuilder(
-//            context.applicationContext,
-//            HeadlineDatabase::class.java,
-//            "headline_database"
-//        )   .fallbackToDestructiveMigration()
-//            .build()
 
         fun getDatabase(context: Context): HeadlineDatabase {
             val tempInstance = INSTANCE
