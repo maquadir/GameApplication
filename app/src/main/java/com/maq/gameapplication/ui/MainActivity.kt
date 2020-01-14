@@ -26,10 +26,11 @@ import com.maq.gameapplication.database.Headlinedao
 import com.maq.gameapplication.databinding.ActivityMainBinding
 import com.maq.propertyapp.network.HeadlineApi
 import com.maq.propertyapp.properties.HeadlineViewModelFactory
+import com.noorlabs.calcularity.interfaces.HeadlineListener
 import kotlinx.android.synthetic.main.custom_toast.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),HeadlineListener {
 
     private  lateinit var viewModel: HeadlineViewModel
     private lateinit var factory: HeadlineViewModelFactory
@@ -82,6 +83,12 @@ class MainActivity : AppCompatActivity() {
         //get data from json reponse
         viewModel.getHeadlines()
 
+        //setup databinding
+        binding.headline = viewModel
+
+        //setup listener
+        viewModel.headlineListener = this
+
 
         //observe the data that is fetched from JSON and add it to Room database
         viewModel.headlines.observe(this, Observer { headlines ->
@@ -105,59 +112,11 @@ class MainActivity : AppCompatActivity() {
         })
 
 
-        //button to skip to next question
-        binding.buttonSkip.setOnClickListener{
-            viewModel.headlinesfetch.observe(this, Observer {
-
-                //iterate to next entry in Room database
-                i = i + 1
-                binding.headlineItem = viewModel.headlines.value?.items?.get(i)
-
-
-            })
-        }
-
-        //button to read article in browser
-        binding.buttonRead.setOnClickListener{
-
-            viewModel.headlinesfetch.observe(this, Observer { headlines ->
-
-                val openURL = Intent(Intent.ACTION_VIEW)
-                openURL.data = Uri.parse(headlines.items[i].storyUrl)
-                startActivity(openURL)
-
-
-            })
-
-        }
-
-        //button to move to next question after submitting answer
-        binding.buttonNextquestion.setOnClickListener{
-
-            viewModel.headlinesfetch.observe(this, Observer {
-
-                //iterate to next question in Room database
-                i = i + 1
-                binding.headlineItem = viewModel.headlines.value?.items?.get(i)
-
-                binding.buttonNextquestion.visibility = View.GONE
-                binding.info.visibility = View.GONE
-                binding.buttonHeadline01.visibility = View.VISIBLE
-                binding.buttonHeadline02.visibility = View.VISIBLE
-                binding.buttonHeadline03.visibility = View.VISIBLE
-                binding.buttonSkip.isEnabled = true
-
-
-            })
-
-        }
-
-
 
     }
 
     //function called when a headline is clicked
-    fun onHeadlineClick(view:View){
+    override fun onHeadlineClick(view:View){
 
         val b = view as Button
         val buttonText = b.text.toString()
@@ -192,6 +151,52 @@ class MainActivity : AppCompatActivity() {
             binding.buttonHeadline03.visibility = View.GONE
             binding.buttonSkip.isEnabled = false
 
+
+
+        })
+    }
+
+    //function to skip to next question
+    override fun onSkip(){
+
+        viewModel.headlinesfetch.observe(this, Observer {
+
+            //iterate to next entry in Room database
+            i = i + 1
+            binding.headlineItem = viewModel.headlines.value?.items?.get(i)
+
+
+        })
+    }
+
+    //function to read article in browser
+    override fun onReadMore(){
+
+        viewModel.headlinesfetch.observe(this, Observer { headlines ->
+
+            val openURL = Intent(Intent.ACTION_VIEW)
+            openURL.data = Uri.parse(headlines.items[i].storyUrl)
+            startActivity(openURL)
+
+
+        })
+    }
+
+    //function to move to next question after submitting answer
+    override fun onNextQuestion(){
+
+        viewModel.headlinesfetch.observe(this, Observer {
+
+            //iterate to next question in Room database
+            i = i + 1
+            binding.headlineItem = viewModel.headlines.value?.items?.get(i)
+
+            binding.buttonNextquestion.visibility = View.GONE
+            binding.info.visibility = View.GONE
+            binding.buttonHeadline01.visibility = View.VISIBLE
+            binding.buttonHeadline02.visibility = View.VISIBLE
+            binding.buttonHeadline03.visibility = View.VISIBLE
+            binding.buttonSkip.isEnabled = true
 
 
         })

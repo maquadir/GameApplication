@@ -1,6 +1,7 @@
 package com.maq.gameapplication
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.maq.gameapplication.data.Headline
 import com.maq.gameapplication.data.HeadlineRepository
 import com.maq.propertyapp.util.Coroutines
+import com.noorlabs.calcularity.interfaces.HeadlineListener
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 class HeadlineViewModel(val repository: HeadlineRepository) : ViewModel() {
 
     private lateinit var job: Job
+    var headlineListener: HeadlineListener? = null
 
     private val _headlines = MutableLiveData<Headline>()
     private val _headlinesfetch = MutableLiveData<Headline>()
@@ -71,6 +74,22 @@ class HeadlineViewModel(val repository: HeadlineRepository) : ViewModel() {
                     { _headlinesfetch.value = it }
                 )
             }
+    }
+
+    fun headlineClick(view: View){
+        headlineListener?.onHeadlineClick(view)
+    }
+
+    fun readMore(view: View){
+        headlineListener?.onReadMore()
+    }
+
+    fun nextQuestion(view: View){
+        headlineListener?.onNextQuestion()
+    }
+
+    fun skipQuestion(view: View){
+        headlineListener?.onSkip()
     }
 
 
